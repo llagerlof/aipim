@@ -6,6 +6,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   fetchModels: (apiKey) => ipcRenderer.invoke('fetch-models', apiKey),
   sendChatRequest: (apiKey, model, systemPrompt, userMessage) => 
     ipcRenderer.invoke('send-chat-request', apiKey, model, systemPrompt, userMessage),
-  copyToClipboard: (text) => clipboard.writeText(text),
+  copyToClipboard: (text) => ipcRenderer.invoke('copy-to-clipboard', text),
   closeApp: () => ipcRenderer.invoke('close-app'),
 });

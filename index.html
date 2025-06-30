@@ -35,9 +35,16 @@
           const textarea = event.target;
           const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
           
-          if (selectedText.trim().length > 0) {
+          let textToCopy = selectedText;
+          
+          // If no text is selected but textarea has content, copy all content
+          if (selectedText.trim().length === 0 && textarea.value.trim().length > 0) {
+            textToCopy = textarea.value;
+          }
+          
+          if (textToCopy.trim().length > 0) {
             event.preventDefault();
-            copyToClipboardAndClose(selectedText);
+            copyToClipboardAndClose(textToCopy);
           }
         }
       });
@@ -122,7 +129,10 @@
           const trimmedText = text.replace(/\s+$/, '');
           
           // Copy to clipboard using Electron's clipboard API
-          window.electronAPI.copyToClipboard(trimmedText);
+          await window.electronAPI.copyToClipboard(trimmedText);
+          
+          // Additional delay before closing to ensure clipboard is committed to system
+          await new Promise(resolve => setTimeout(resolve, 1000));
           
           // Close the application
           await window.electronAPI.closeApp();

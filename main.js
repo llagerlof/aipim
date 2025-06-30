@@ -169,6 +169,41 @@ ipcMain.handle('send-chat-request', async (event, apiKey, model, systemPrompt, u
   return sendChatRequest(apiKey, model, systemPrompt, userMessage);
 });
 
+ipcMain.handle('copy-to-clipboard', async (event, text) => {
+  const { clipboard } = require('electron');
+  const { spawn } = require('child_process');
+  
+  try {
+    // Method 1: Use Electron's clipboard
+    clipboard.clear();
+    clipboard.writeText(text);
+    
+    // Method 2: Also try system clipboard (for Linux) as backup
+    if (process.platform === 'linux') {
+      try {
+        const xclip = spawn('xclip', ['-selection', 'clipboard']);
+        xclip.stdin.write(text);
+        xclip.stdin.end();
+        
+        await new Promise((resolve) => {
+          xclip.on('close', () => resolve());
+          xclip.on('error', () => resolve()); // Don't fail if xclip unavailable
+        });
+      } catch (xclipError) {
+        // xclip not available, but Electron clipboard should still work
+      }
+    }
+    
+    // Delay to ensure system clipboard is properly updated
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    return true;
+  } catch (error) {
+    console.error('Error copying to clipboard:', error);
+    throw error;
+  }
+});
+
 ipcMain.handle('close-app', async () => {
   app.quit();
 });
