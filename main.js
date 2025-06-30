@@ -1,6 +1,22 @@
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
+
+const menuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      { label: 'Configuration' },
+      { label: 'Exit', role: 'quit' }
+    ]
+  },
+  {
+    label: 'Help',
+    submenu: [
+      { label: 'About' }
+    ]
+  }
+];
 
 function createWindow () {
   const win = new BrowserWindow({
@@ -16,6 +32,9 @@ function createWindow () {
 
 app.whenReady().then(() => {
   createWindow();
+
+  const menu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(menu);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
