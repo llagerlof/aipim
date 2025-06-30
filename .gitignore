@@ -1,0 +1,62 @@
+# Dependencies
+/node_modules/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment files
+.env
+.env.*.local
+
+# IDE/editor directories
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build output
+/dist
+/build
+/out
+/release
+/Release
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Electron package artifacts
+*.app
+*.exe
+*.dll
+*.deb
+*.rpm
+*.pkg
+*.dmg
+*.zip
+*.7z
+*.asar
+
+# Miscellaneous
+logs
+*.log
+tmp/
+.cache
+.npm
+.eslintcache
+
+# Bower dependencies
+bower_components/
+
+# JSPM dependencies
+jspm_packages/
+
+# Sass cache
+.sass-cache/
+
+# Misc backup files
+*.orig
