@@ -1,4 +1,8 @@
 
-window.addEventListener('DOMContentLoaded', () => {
-  // You can add any preload scripts here if needed.
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  getConfig: () => ipcRenderer.invoke('get-config'),
+  saveConfig: (config) => ipcRenderer.invoke('save-config', config),
+  fetchModels: (apiKey) => ipcRenderer.invoke('fetch-models', apiKey),
 });
