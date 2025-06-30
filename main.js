@@ -1,4 +1,3 @@
-
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -109,6 +108,70 @@ ipcMain.handle('save-config', async (event, config) => {
 });
 
 ipcMain.handle('fetch-models', async (event, apiKey) => fetchModels(apiKey));
+
+/**
+ * Send a chat request to OpenAI API
+ * @param {string} apiKey
+ * @param {string} model
+ * @param {string} systemPrompt
+ * @param {string} userMessage
+ * @returns {Promise<string>}
+ */
+function sendChatRequest(apiKey, model, systemPrompt, userMessage) {
+  return new Promise((resolve, reject) => {
+    const requestBody = JSON.stringify({
+      model: model,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage }
+      ]
+    });
+
+    const options = {
+      method: 'POST',
+      hostname: 'api.openai.com',
+      path: '/v1/chat/completions',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(requestBody)
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', (chunk) => (data += chunk));
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          try {
+            const result = JSON.parse(data);
+            if (result.choices && result.choices[0] && result.choices[0].message) {
+              resolve(result.choices[0].message.content);
+            } else {
+              reject(new Error('Invalid response format'));
+            }
+          } catch (err) {
+            reject(err);
+          }
+        } else {
+          reject(new Error(`API Error: ${res.statusCode} ${data}`));
+        }
+      });
+    });
+
+    req.on('error', reject);
+    req.write(requestBody);
+    req.end();
+  });
+}
+
+ipcMain.handle('send-chat-request', async (event, apiKey, model, systemPrompt, userMessage) => {
+  return sendChatRequest(apiKey, model, systemPrompt, userMessage);
+});
+
+ipcMain.handle('close-app', async () => {
+  app.quit();
+});
 
 app.whenReady().then(() => {
   createWindow();

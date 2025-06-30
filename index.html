@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,7 +6,132 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <textarea id="textarea1"></textarea>
-    <textarea id="textarea2"></textarea>
+    <div class="textarea-container">
+      <textarea id="textarea1" placeholder="Type your message here... Press Ctrl+Enter to send"></textarea>
+    </div>
+    <div class="textarea-container">
+      <textarea id="textarea2" placeholder="Response will appear here..."></textarea>
+    </div>
+
+    <script>
+      let isLoading = false;
+
+      // Focus on first textarea when window loads
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('textarea1').focus();
+      });
+
+      // Add event listener for Ctrl+Enter on first textarea
+      document.getElementById('textarea1').addEventListener('keydown', async (event) => {
+        if (event.ctrlKey && event.key === 'Enter') {
+          event.preventDefault();
+          await sendMessage();
+        }
+      });
+
+      // Add event listener for Enter on second textarea with selected text
+      document.getElementById('textarea2').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          const textarea = event.target;
+          const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
+          
+          if (selectedText.trim().length > 0) {
+            event.preventDefault();
+            copyToClipboardAndClose(selectedText);
+          }
+        }
+      });
+
+      async function sendMessage() {
+        if (isLoading) return;
+
+        const textarea1 = document.getElementById('textarea1');
+        const textarea2 = document.getElementById('textarea2');
+        const userMessage = textarea1.value.trim();
+
+        if (!userMessage) return;
+
+        try {
+          // Get configuration
+          const config = await window.electronAPI.getConfig();
+          if (!config.apiKey || !config.model || !config.systemPrompt) {
+            alert('Please configure your OpenAI API key, model, and system prompt first (File > Configuration)');
+            return;
+          }
+
+          // Start loading state
+          setLoadingState(true);
+
+          // Send request to OpenAI
+          const response = await window.electronAPI.sendChatRequest(
+            config.apiKey,
+            config.model,
+            config.systemPrompt,
+            userMessage
+          );
+
+          // Display response
+          textarea2.value = response;
+
+          // End loading state and focus/select second textarea
+          setLoadingState(false);
+          textarea2.focus();
+          textarea2.select();
+
+        } catch (error) {
+          setLoadingState(false);
+          textarea2.value = `Error: ${error.message}`;
+          textarea2.focus();
+        }
+      }
+
+      function setLoadingState(loading) {
+        isLoading = loading;
+        const textarea1 = document.getElementById('textarea1');
+        const textarea2 = document.getElementById('textarea2');
+        
+        if (loading) {
+          // Disable textareas
+          textarea1.disabled = true;
+          textarea2.disabled = true;
+          
+          // Add loading indicator to second textarea's container
+          const container = textarea2.parentElement;
+          if (!container.querySelector('.loading-indicator')) {
+            const loadingDot = document.createElement('div');
+            loadingDot.className = 'loading-indicator';
+            container.appendChild(loadingDot);
+          }
+        } else {
+          // Enable textareas
+          textarea1.disabled = false;
+          textarea2.disabled = false;
+          
+          // Remove loading indicator
+          const container = textarea2.parentElement;
+          const loadingDot = container.querySelector('.loading-indicator');
+          if (loadingDot) {
+            loadingDot.remove();
+          }
+        }
+      }
+
+      async function copyToClipboardAndClose(text) {
+        try {
+          // Trim whitespace from the end
+          const trimmedText = text.replace(/\s+$/, '');
+          
+          // Copy to clipboard using Electron's clipboard API
+          window.electronAPI.copyToClipboard(trimmedText);
+          
+          // Close the application
+          await window.electronAPI.closeApp();
+        } catch (error) {
+          console.error('Failed to copy to clipboard:', error);
+          // Fallback: still close the application
+          await window.electronAPI.closeApp();
+        }
+      }
+    </script>
   </body>
 </html>
