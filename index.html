@@ -21,6 +21,14 @@
         document.getElementById('textarea1').focus();
       });
 
+      // Add ESC key handler to close app without copying
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          window.electronAPI.closeApp();
+        }
+      });
+
       // Add event listener for Ctrl+Enter on first textarea
       document.getElementById('textarea1').addEventListener('keydown', async (event) => {
         if (event.ctrlKey && event.key === 'Enter') {

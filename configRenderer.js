@@ -5,6 +5,14 @@ window.addEventListener('DOMContentLoaded', () => {
   const saveBtn = document.getElementById('saveBtn');
   const cancelBtn = document.getElementById('cancelBtn');
 
+  // Add ESC key handler to close config window without saving
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      window.close();
+    }
+  });
+
   async function loadModels(key) {
     modelSelect.disabled = true;
     modelSelect.innerHTML = '<option>Loading...</option>';
