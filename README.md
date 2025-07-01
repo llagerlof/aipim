@@ -26,9 +26,9 @@ This application is a lightweight electron-based desktop application that provid
 
 A common scenario is when we need to ask something ephemeral to ChatGPT. We need to open the browser, visit the website, select the temporary chat option, click the textarea, write or paste, press ENTER, select the answer, and copy it (sigh).
 
-For these ephemeral prompts AIpim can help a lot. In `File > Configuration`, set your OpenAI key and the model. If you don't know which one you want to use, select `gpt-4.1-nano`, which is cheap and very good. Don't forget ot bind the script `start` to something you like (I use _CTRL+Shift+F11_).
+For these ephemeral prompts AIpim can help a lot. In `File > Configuration`, set your OpenAI key and the model. If you don't know which one you want to use, select `gpt-4.1-nano`, which is cheap and very good. Don't forget ot bind the script `start.sh` to something you like (I use _CTRL+Shift+F11_).
 
-Let's simulate the same action I described above, now using AIpim. If we need to ask ChatGPT something ephemeral, just call the AIpim app using the shortcut you configured, or run the `start` script directly from the terminal. Write or paste the text and press CTRL+ENTER. When the answer arrives it is already selected, so just press ENTER twice to copy the answer and automatically close the program.
+Let's simulate the same action I described above, now using AIpim. If we need to ask ChatGPT something ephemeral, just call the AIpim app using the shortcut you configured, or run the `start.sh` script directly from the terminal. Write or paste the text and press CTRL+ENTER. When the answer arrives it is already selected, so just press ENTER twice to copy the answer and automatically close the program.
 
 This is not an app for conversation; it's an app for quick question-answer-copy.
 
@@ -65,7 +65,7 @@ This is not an app for conversation; it's an app for quick question-answer-copy.
 
 3. **Run the application**
    ```bash
-   npm start # or just run the script `start` if you are using Linux
+   npm start # or just run the script `start.sh` if you are using Linux
    ```
 
 ## ⚙️ Configuration
@@ -93,7 +93,7 @@ This is not an app for conversation; it's an app for quick question-answer-copy.
 ### Available Scripts
 
 - `npm start` - Launch the application in development mode
-- `start` - Shell script (bash) to run the command above. It's also good for binding a shortcut to it.
+- `start.sh` - Shell script (bash) to run the command above. It's also good for binding a shortcut to it.
 
 ## 📄 License
 
