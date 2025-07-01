@@ -6,8 +6,8 @@
 
 **A simple, fast desktop application for OpenAI API interactions**
 
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-blue.svg)](https://github.com/llagerlof/aipim)
-[![License](https://img.shields.io/badge/license-ISC-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue.svg)](https://github.com/llagerlof/aipim)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 [![Electron](https://img.shields.io/badge/Electron-37.1.0-blue.svg)](https://electronjs.org/)
 
 </div>
@@ -94,6 +94,10 @@ This is not an app for conversation; it's an app for quick question-answer-copy.
 
 - `npm start` - Launch the application in development mode
 - `start` - Shell script (bash) to run the command above. It's also good for binding a shortcut to it.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
 ## 🤝 Contributing
 
