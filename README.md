@@ -18,7 +18,7 @@ AIpim is perfect for quick AI-powered text generation without the overhead of a 
 
 This application is a lightweight electron-based desktop application that provides a streamlined interface for interacting with OpenAI's API.
 
-### 🖼️ Main Window
+### Main Window
 
 ![Main window](assets/aipim_main.png)
 
@@ -77,7 +77,7 @@ This is not an app for conversation; it's an app for quick question-answer-copy.
 5. Customize the system prompt
 6. Click **Save**
 
-### 🖼️ Configuration window
+### Configuration window
 
 ![Configuration window](assets/aipim_config.png)
 
