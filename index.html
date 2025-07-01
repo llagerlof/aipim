@@ -43,17 +43,12 @@
           const textarea = event.target;
           const selectedText = textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
           
-          let textToCopy = selectedText;
-          
-          // If no text is selected but textarea has content, copy all content
-          if (selectedText.trim().length === 0 && textarea.value.trim().length > 0) {
-            textToCopy = textarea.value;
-          }
-          
-          if (textToCopy.trim().length > 0) {
+          // Only copy and close if there is actually selected text
+          if (selectedText.trim().length > 0) {
             event.preventDefault();
-            copyToClipboardAndClose(textToCopy);
+            copyToClipboardAndClose(selectedText);
           }
+          // If no text is selected, let the default behavior happen (insert newline)
         }
       });
 
