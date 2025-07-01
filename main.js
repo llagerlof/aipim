@@ -98,7 +98,7 @@ ipcMain.handle('get-config', async () => {
   } catch {
     // Config file doesn't exist, create it with default system prompt
     const defaultConfig = {
-      systemPrompt: 'Answer briefly in the same language in which the user wrote the prompt.'
+      systemPrompt: 'Answer briefly.'
     };
     
     try {
