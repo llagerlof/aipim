@@ -91,7 +91,19 @@ ipcMain.handle('get-config', async () => {
     const data = await fsPromises.readFile(configPath, 'utf8');
     return JSON.parse(data);
   } catch {
-    return {};
+    // Config file doesn't exist, create it with default system prompt
+    const defaultConfig = {
+      systemPrompt: 'Answer briefly in the same language in which the user wrote the prompt.'
+    };
+    
+    try {
+      await fsPromises.mkdir(path.dirname(configPath), { recursive: true });
+      await fsPromises.writeFile(configPath, JSON.stringify(defaultConfig, null, 2), 'utf8');
+      return defaultConfig;
+    } catch (err) {
+      console.error('Failed to create default config file', err);
+      return defaultConfig; // Return the default config even if file creation fails
+    }
   }
 });
 
