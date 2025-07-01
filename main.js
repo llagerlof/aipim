@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
@@ -50,7 +50,12 @@ const menuTemplate = [
   {
     label: 'Help',
     submenu: [
-      { label: 'About' }
+      { 
+        label: 'About', 
+        click: () => {
+          shell.openExternal('https://github.com/llagerlof/aipim');
+        }
+      }
     ]
   }
 ];
